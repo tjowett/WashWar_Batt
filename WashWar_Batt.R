@@ -31,8 +31,20 @@ WWBatt <- function() {
   # Part 2 Enter Battle details -------------------------------------------------------------
   writeLines("Part 2: Enter Battle details")
 
-  #British Regulars Asvantage (Br only) (9.41)
+    #General's Battle rating
+    Br.GR <- readline("Enter the battle rating of the British General:")
+    Am.GR <- readline("Enter the battle rating of the American General:")
 
+    #CU's
+    Am.CU <- readline("Enter the American CU's in the battle:")
+    Br.CU <- readline("Enter the British CU's in the battle:")
+
+  #British Regulars Advantage (Br only) (9.41)
+    Br.BR.DRM <- 0
+    Am.BR.DRM <- NA
+
+    br <- readline("Do the British regulars have the Advantage?")
+    if(br=="y"){Br.BR.DRM <- 1}
 
     #Royal Navy Support (Br only) (9.42)
 
@@ -98,7 +110,7 @@ WWBatt <- function() {
     # Part 3 Battle Resolution -------------------------------------------------------------
   writeLines("Part 3: Battle Resolution")
 
-    writeLines("Step 1: Play ")
+    writeLines("Step 1: Play Cards")
 
       # Battle card bonus (9.45):
     Br.BC.DRM <- 0
@@ -107,7 +119,7 @@ WWBatt <- function() {
 if(a=="y"){
   pd.aad <- readline("Did the attacker(America) discard an event strategy card?")
 if(pd.aad=="n"){
-  pd.aap <- readline("Does the attacker(America) play a Battle card?")
+  pd.aap <- readline("Did the attacker(America) play a Battle card?")
 }
 if(pd.aad=="y"){Am.BC.DRM <- 1 }
 if(pd.aap=="y"){Am.BC.DRM <- readline("Enter the DRM from the American Battle card:") }
@@ -128,15 +140,89 @@ if(pd.aad=="n"){
 if(pd.aad=="y"){Br.BC.DRM <- 1 }
 if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the British Battle card:") }
 
-  pd.db <- readline("Dis the defender(America) discard an event strategy card?")
+  pd.db <- readline("Did the defender(America) discard an event strategy card?")
 if(pd.db=="n"){
   pd.dbp <- readline("Did the defender(America) play a Battle card?")
 }
-if(pd.db=="y"){Br.BC.DRM <- 1 }
-if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the American Battle card:") }
+if(pd.db=="y"){Am.BC.DRM <- 1 }
+if(pd.aap=="y"){Am.BC.DRM <- readline("Enter the DRM from the American Battle card:") }
 }
 
+    # Step 2: Determine actual General's battle rating---------
+writeLines("Step 2: Determine Actual Battle Rating of each General")
 
+    Am.DR <- readline("American die roll:")
+    Br.DR <- readline("Bristish die roll:")
+
+    if(Am.DR <=3){Am.GR <- round(Am.GR/2)
+      if(Am.GR > Am.CU){Am.GR <- Am.CU}
+    }
+    if(Am.DR > 3){
+      if(Am.GR > Am.CU){Am.GR <- Am.CU}
+    }
+
+    if(Br.DR <=3){Br.GR <- round(Br.GR/2)
+      if(Br.GR > Br.CU){Br.GR <- Br.CU}
+    }
+    if(Br.DR > 3){
+      if(Br.GR > Br.CU){Br.GR <- Br.CU}
+    }
+
+    # Step 3: Calculate the total DRM---------
+    writeLines("Step 3: Calculate the total DRM")
+
+    Am.TDRM <- Am.CU + Am.GR + Am.MS.DRM + Am.WO.DRM + Am.Int.DRM
+    Br.TDRM <- Br.CU + Br.GR + Br.BR.DRM + Br.RNS.DRM + Br.MS.DRM
+
+    # Step 4: Determine Battle Winner---------
+    writeLines("Step 4: Determine Battle Winner")
+
+    Am.BDR <- readline("American die roll:")
+    Br.BDR <- readline("Bristish die roll:")
+
+    Am.BS <- Am.TDRM + Am.BDR
+    Br.BS <- Br.TDRM + Br.BDR
+    CD <- abs(Am.BS-Br.BS)
+
+    if(Am.BS > Br.BS & Att=="Am"){
+      BW <- "Am"
+      writeLines("The Americans (attackers) won the Battle!")
+      writeLines(paste("Margin of victory:",CD))
+    }
+
+    if(Br.BS > Am.BS & Att=="Br"){
+      BW <- "Br"
+      writeLines("The British (attackers) won the Battle!")
+      writeLines(paste("Margin of victory:",CD))
+    }
+
+    if(Am.BS > Br.BS & Def=="Am"){
+      BW <- "Am"
+      writeLines("The Americans (defernders) won the Battle!")
+      writeLines(paste("Margin of victory:",CD))
+    }
+
+    if(Br.BS > Am.BS & Def=="Br"){
+      BW <- "Br"
+      writeLines("The British (defenders) won the Battle!")
+      writeLines(paste("Margin of victory:",CD))
+    }
+
+    if(Am.BS==Br.BS){
+      if(Att=="Am"){
+        BW <- "Am"
+        writeLines("The Americans (attackers) won the Battle!")
+        writeLines(paste("Margin of victory:",CD))
+      }
+      if(Att=="Br"){
+        BW <- "Br"
+        writeLines("The British (attackers) won the Battle!")
+        writeLines(paste("Margin of victory:",CD))
+      }
+    }
+
+    # Step 5: Determine CU losses of BOTH sides ---------
+    writeLines("Step 5: Determine the CU losses of BOTH sides")
 
   return(c(Am.WO.DRM,Br.Port.DRM))
   }
