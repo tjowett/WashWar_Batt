@@ -30,17 +30,50 @@ WWBatt <- function() {
 
   # Part 2 Enter Battle details -------------------------------------------------------------
 
-  writeLines("Part 12: Enter Battle details")
+  writeLines("Part 2: Enter Battle details")
 
-  #Interception
-  Br.Int.DRM <- NA
-  Am.Int.DRM <- 0
-  if(a=="y"){
-    I <- readline("Did the American army conduct a successful Intercept?")
-    if(I=="y"){Am.Int.DRM <- 1}
-  }
+  #British Regulars Asvantage (Br only) (9.41)
 
-  # Winter Offensive(Am only):
+
+    #Royal Navy Support (Br only) (9.42)
+
+    Br.RNS.DRM <- 0
+    Am.RNS.DRM <- NA
+
+  p <- readline("Is the battle taking place in a non-blockaded Port?")
+
+    if(p=="y"){
+      fp <- readline("Is the port fortified?")
+      if(fp=="n"){Br.RNS.DRM <- 1}
+        if(fp=="y"){
+          fp.br.pcm <- readline("Does the space contain a Br PCM?")
+          if(fp.br.pcm=="y"){Br.RNS.DRM <- 1}
+        }
+    }
+
+     # Militia support (9.43):
+    Br.MS.DRM <- 0
+    Am.MS.DRM <- 0
+
+    bc <- readline("Is the battle taking place in Canada?")
+
+    if(bc=="y"){
+      cc <- readline("Does one side control Canada, Montreal and Quebec?")
+      if(cc=="y"){scc <- redline("Which side controls Canada, Mpntreal and Quebec?")
+        if(scc=="Am"){Am.MS.DRM <- 1}
+        if(scc=="Br"){Br.MS.DRM <- 1}
+      }
+    }
+
+    if(bc=="n"){
+      co <- readline("Is the battle space within a controlled Colony?")
+      if(co=="y"){ccc <- redline("Which side controls the Colony?")
+        if(ccc=="Am"){Am.MS.DRM <- 1}
+        if(ccc=="Br"){Br.MS.DRM <- 1}
+      }
+    }
+
+ # Winter Offensive(Am only) (9.44):
   Br.WO.DRM <- NA
   Am.WO.DRM <- 0
 
@@ -55,20 +88,49 @@ WWBatt <- function() {
     }
   }
 
-  # Port DRM(Br only):
-  Br.Port.DRM <- 0
-  Am.Port.DRM <- NA
+  # Battle card bonus (9.45):
+    Br.BC.DRM <- 0
+    Am.BC.DRM <- 0
 
-  p <- readline("Is the battle taking place in a non-blockaded Port?")
+if(a=="y"){
+  pd.aad <- readline("Did the attacker(America) discard an event strategy card?")
+if(pd.aad=="n"){
+  pd.aap <- readline("Does the attacker(America) play an event strategy card?")
+}
+if(pd.aad=="y"){Am.BC.DRM <- 1 }
+if(pd.aap=="y"){Am.BC.DRM <- readline("Enter the DRM from the American event strategy card:") }
 
-    if(p=="y"){
-      fp <- readline("Is the port fortified?")
-      if(fp=="n"){Br.Port.DRM <- 1}
-        if(fp=="y"){
-          fp.br.pcm <- readline("Does the space contain a Br PCM?")
-          if(fp.br.pcm=="y"){Br.Port.DRM <- 1}
-        }
-    }
+  pd.db <- readline("Did the defender(Britain) discard an event strategy card?")
+if(pd.db=="n"){
+  pd.dbp <- readline("Did the defender(Britain) play an event strategy card?")
+}
+if(pd.db=="y"){Br.BC.DRM <- 1 }
+if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the Bristish event strategy card:") }
+}
+
+if(a=="n"){
+  pd.aad <- readline("Did the attacker(Britain discard an event strategy card?")
+if(pd.aad=="n"){
+  pd.aap <- readline("Did the attacker(Britain) play an event strategy card?")
+}
+if(pd.aad=="y"){Br.BC.DRM <- 1 }
+if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the British event strategy card:") }
+
+  pd.db <- readline("Dis the defender(America) discard an event strategy card?")
+if(pd.db=="n"){
+  pd.dbp <- readline("Did the defender(America) play an event strategy card?")
+}
+if(pd.db=="y"){Br.BC.DRM <- 1 }
+if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the American event strategy card:") }
+}
+
+  #Interception (Am only) (9.46):
+  Br.Int.DRM <- NA
+  Am.Int.DRM <- 0
+  if(a=="y"){
+    I <- readline("Did the American army conduct a successful Intercept?")
+    if(I=="y"){Am.Int.DRM <- 1}
+  }
 
   return(c(Am.WO.DRM,Br.Port.DRM))
   }
