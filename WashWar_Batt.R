@@ -29,7 +29,6 @@ WWBatt <- function() {
   if(sr=="n"|ar=="n"){
 
   # Part 2 Enter Battle details -------------------------------------------------------------
-
   writeLines("Part 2: Enter Battle details")
 
   #British Regulars Asvantage (Br only) (9.41)
@@ -88,42 +87,6 @@ WWBatt <- function() {
     }
   }
 
-  # Battle card bonus (9.45):
-    Br.BC.DRM <- 0
-    Am.BC.DRM <- 0
-
-if(a=="y"){
-  pd.aad <- readline("Did the attacker(America) discard an event strategy card?")
-if(pd.aad=="n"){
-  pd.aap <- readline("Does the attacker(America) play an event strategy card?")
-}
-if(pd.aad=="y"){Am.BC.DRM <- 1 }
-if(pd.aap=="y"){Am.BC.DRM <- readline("Enter the DRM from the American event strategy card:") }
-
-  pd.db <- readline("Did the defender(Britain) discard an event strategy card?")
-if(pd.db=="n"){
-  pd.dbp <- readline("Did the defender(Britain) play an event strategy card?")
-}
-if(pd.db=="y"){Br.BC.DRM <- 1 }
-if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the Bristish event strategy card:") }
-}
-
-if(a=="n"){
-  pd.aad <- readline("Did the attacker(Britain discard an event strategy card?")
-if(pd.aad=="n"){
-  pd.aap <- readline("Did the attacker(Britain) play an event strategy card?")
-}
-if(pd.aad=="y"){Br.BC.DRM <- 1 }
-if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the British event strategy card:") }
-
-  pd.db <- readline("Dis the defender(America) discard an event strategy card?")
-if(pd.db=="n"){
-  pd.dbp <- readline("Did the defender(America) play an event strategy card?")
-}
-if(pd.db=="y"){Br.BC.DRM <- 1 }
-if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the American event strategy card:") }
-}
-
   #Interception (Am only) (9.46):
   Br.Int.DRM <- NA
   Am.Int.DRM <- 0
@@ -131,6 +94,49 @@ if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the American event str
     I <- readline("Did the American army conduct a successful Intercept?")
     if(I=="y"){Am.Int.DRM <- 1}
   }
+
+    # Part 3 Battle Resolution -------------------------------------------------------------
+  writeLines("Part 3: Battle Resolution")
+
+    writeLines("Step 1: Play ")
+
+      # Battle card bonus (9.45):
+    Br.BC.DRM <- 0
+    Am.BC.DRM <- 0
+
+if(a=="y"){
+  pd.aad <- readline("Did the attacker(America) discard an event strategy card?")
+if(pd.aad=="n"){
+  pd.aap <- readline("Does the attacker(America) play a Battle card?")
+}
+if(pd.aad=="y"){Am.BC.DRM <- 1 }
+if(pd.aap=="y"){Am.BC.DRM <- readline("Enter the DRM from the American Battle card:") }
+
+  pd.db <- readline("Did the defender(Britain) discard an event strategy card?")
+if(pd.db=="n"){
+  pd.dbp <- readline("Did the defender(Britain) play a Battle card?")
+}
+if(pd.db=="y"){Br.BC.DRM <- 1 }
+if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the Bristish Battle card:") }
+}
+
+if(a=="n"){
+  pd.aad <- readline("Did the attacker(Britain discard an event strategy card?")
+if(pd.aad=="n"){
+  pd.aap <- readline("Did the attacker(Britain) play a Battle card?")
+}
+if(pd.aad=="y"){Br.BC.DRM <- 1 }
+if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the British Battle card:") }
+
+  pd.db <- readline("Dis the defender(America) discard an event strategy card?")
+if(pd.db=="n"){
+  pd.dbp <- readline("Did the defender(America) play a Battle card?")
+}
+if(pd.db=="y"){Br.BC.DRM <- 1 }
+if(pd.aap=="y"){Br.BC.DRM <- readline("Enter the DRM from the American Battle card:") }
+}
+
+
 
   return(c(Am.WO.DRM,Br.Port.DRM))
   }
