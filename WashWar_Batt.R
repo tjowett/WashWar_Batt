@@ -4,6 +4,9 @@ WWBatt <- function() {
   writeLines("Part 1: Pre-battle retreat by Americans")
 
   #Generals
+  Am.Gn.name <- NA
+  Br.Gn.name <- NA
+
   w <- readline("Is the American army commanded by Washington?")
   if(w=="y") {Am.Gn.name <- "Washington"}
   if(w=="n"){
@@ -45,11 +48,13 @@ Br.Gn <- writeLines("Is the Bristish army commanded by a General?")
 
     #General's Battle rating
     if(Br.Gn=="y"){
-      Br.GR <- readline("Enter the battle rating of the British General:")
+      Br.GR <- readline("Enter the Battle Rating of the British General:")
+      Br.AG <- readline("Enter the Agility Rating of the British General:")
     }
 
-    if(Am.Gn=="y")
-      Am.GR <- readline("Enter the battle rating of the American General:")
+    if(Am.Gn=="y"){
+      Am.GR <- readline("Enter the Battle Rating of the American General:")
+      Am.AG <- readline("Enter the Battle Rating of the American General:")
     }
 
     #CU's
@@ -58,14 +63,12 @@ Br.Gn <- writeLines("Is the Bristish army commanded by a General?")
 
   #British Regulars Advantage (Br only) (9.41)
     Br.BR.DRM <- 0
-    Am.BR.DRM <- NA
 
     br <- readline("Do the British regulars have the Advantage?")
     if(br=="y"){Br.BR.DRM <- 1}
 
     #Royal Navy Support (Br only) (9.42)
     Br.RNS.DRM <- 0
-    Am.RNS.DRM <- NA
 
   p <- readline("Is the battle taking place in a non-blockaded Port?")
 
@@ -101,7 +104,6 @@ Br.Gn <- writeLines("Is the Bristish army commanded by a General?")
     }
 
  # Winter Offensive(Am only) (9.44):
-  Br.WO.DRM <- NA
   Am.WO.DRM <- 0
 
   if(Att=="Am") {
@@ -116,8 +118,8 @@ Br.Gn <- writeLines("Is the Bristish army commanded by a General?")
   }
 
   #Interception (Am only) (9.46):
-  Br.Int.DRM <- NA
   Am.Int.DRM <- 0
+
   if(a=="y"){
     I <- readline("Did the American army conduct a successful Intercept?")
     if(I=="y"){Am.Int.DRM <- 1}
@@ -167,24 +169,27 @@ if(pd.aap=="y"){Am.BC.DRM <- readline("Enter the DRM from the American Battle ca
     # Step 2: Determine actual General's battle rating---------
 writeLines("Step 2: Determine realised Battle Rating of each General")
 
+  Am.GRR <- NA
+  Br.GRR <- NA
+
   if(Am.Gn=="y"){
     Am.DR <- readline("American die roll:")
-    if(Am.DR <=3){Am.GR <- round(Am.GR/2)
-      if(Am.GR > Am.CU){Am.GR <- Am.CU}
+    if(Am.DR <=3){Am.GRR <- round(Am.GR/2)
+      if(Am.GRR > Am.CU){Am.GRR <- Am.CU}
     }
     if(Am.DR > 3){
-      if(Am.GR > Am.CU){Am.GR <- Am.CU}
+      if(Am.GR > Am.CU){Am.GRR <- Am.CU}
     }
     writeLines(paste("Realised Battle rating of American General:",Am.GR))
   }
 
   if(Br.Gn=="y"){
   Br.DR <- readline("Bristish die roll:")
-    if(Br.DR <=3){Br.GR <- round(Br.GR/2)
-      if(Br.GR > Br.CU){Br.GR <- Br.CU}
+    if(Br.DR <=3){Br.GRR <- round(Br.GR/2)
+      if(Br.GRR > Br.CU){Br.GRR <- Br.CU}
     }
     if(Br.DR > 3){
-      if(Br.GR > Br.CU){Br.GR <- Br.CU}
+      if(Br.GR > Br.CU){Br.GRR <- Br.CU}
     }
     writeLines(paste("Realised Battle rating of British General:",Br.GR))
   }
@@ -192,10 +197,10 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
     # Step 3: Calculate the total DRM---------
     writeLines("Step 3: Calculate the total DRM (Table 9.4)")
 
-    Am.TDRM <- Am.CU + Am.GR + Am.MS.DRM + Am.WO.DRM + Am.Int.DRM
-    Br.TDRM <- Br.CU + Br.GR + Br.BR.DRM + Br.RNS.DRM + Br.MS.DRM
-    writeLines(paste("American Total Die Roll Modifier:",Am.TDRM))
-    writeLines(paste("British Total Die Roll Modifier:",Br.TDRM))
+    Am.TDRM <- Am.CU + Am.GRR + Am.MS.DRM + Am.WO.DRM + Am.Int.DRM
+    Br.TDRM <- Br.CU + Br.GRR + Br.BR.DRM + Br.RNS.DRM + Br.MS.DRM
+    writeLines(paste("American Total Die Roll Modifier:", Am.TDRM))
+    writeLines(paste("British Total Die Roll Modifier:", Br.TDRM))
 
     # Step 4: Determine Battle Winner---------
     writeLines("Step 4: Determine Battle Winner")
@@ -214,14 +219,14 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
       BW <- "Am"
       BL <- "Br"
       writeLines("The Americans (attackers) won the Battle!")
-      writeLines(paste("Margin of victory:",CD))
+      writeLines(paste("Margin of victory:", CD))
     }
 
     if(Br.BS > Am.BS & Att=="Br"){
       BW <- "Br"
       BL <- "Am"
       writeLines("The British (attackers) won the Battle!")
-      writeLines(paste("Margin of victory:",CD))
+      writeLines(paste("Margin of victory:", CD))
     }
 
     if(Am.BS > Br.BS & Def=="Am"){
@@ -249,7 +254,7 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
         BW <- "Br"
         BL <- "Am"
         writeLines("The British (attackers) won the Battle!")
-        writeLines(paste("Margin of victory:",CD))
+        writeLines(paste("Margin of victory:", CD))
       }
     }
 
@@ -264,9 +269,9 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
 
     writeLines(paste("Step 5.2: The winner:",BW,"rolls a die."))
     WDR <- writeLines("Enter die roll:")
-    if(WDR<=3){writeLines(paste("The loser:",BW,"loses 1CU."))}
-    if(WDR==4|LDR==5){writeLines(paste("The loser:",BW,"loses 2CU."))}
-    if(WDR==6){writeLines(paste("The loser:",BW,"loses 2CU."))}
+    if(WDR<=3){writeLines(paste("The winner:",BW,"loses 1CU."))}
+    if(WDR==4|LDR==5){writeLines(paste("The winner:",BW,"loses 2CU."))}
+    if(WDR==6){writeLines(paste("The winner:",BW,"loses 2CU."))}
 
   writeLines(c("If the winning General has no CU's and the space is enemy controlled",
                           "then the General is captured."))
@@ -296,6 +301,10 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
     if(LS == "y"){
       if(LS == "n"){
         writeLines("Conduct surrender: CU's are eliminated and General's are captured (see 7.6, pg 12")
+        SCon <- readLines("Has surrender been conducted?:")
+        if(SCon=="y"){
+         writeLines("After surrender, the Battle has ended. Have a nice day.")
+        }
       }
     }
 
@@ -303,7 +312,28 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
       writeLines("The Battle has ended. Have a nice day.")
     }
 
-  return(c(Am.WO.DRM,Br.Port.DRM))
+  BattleSummary <- list(
+    General_Names = c(Am.Gn.name, Br.Gn.name),
+    General_Battle_Ratings = c(Am.GR,Br.GR),
+    General_DR =c(Am.DR,Br.DR),
+    Realisised_General_Battle_Ratings = c(Am.GRR,Br.GRR),
+    Att_Def = c(Att,Def),
+    American_retreat = ar,
+    CU = c(Am.CU,Br.CU),
+    Br_Reg_Adv = Br.BR.DRM,
+    Br_RylNav = Br.RNS.DRM,
+    Militia = c(Br.MS.DRM,Am.MS.DRM),
+    Am_Wint_Off = c(Am.WO.DRM),
+    Am_Int = c(Am.Int.DRM),
+    BattleCard_DRM = c(Br.BC.DRM,Am.BC.DRM),
+    Total_DRM =c(Am.TDRM,Br.TDRM),
+    Battle_DR = c(Am.BDR,Br.BDR),
+    Battle_Str = c(Am.BS,Br.BS)
+
+  )
+
+  return(c(Am.WO.DRM, Br.Port.DRM))
+  } #end of retreat == "no"
 }
 
 WWBatt()
