@@ -3,11 +3,17 @@ WWBatt <- function() {
   # PART 1 RETREAT -------------------------------------------------------------
   writeLines("Part 1: Pre-battle retreat by Americans")
 
+  #Battle location:
+  Batt.Loc <- writeLines("Enter the name of the Battle Space:")
+
   #Generals
+  Br.Gn <- writeLines("Is the Bristish army commanded by a General?")
+
   Am.Gn.name <- NA
   Br.Gn.name <- NA
 
   w <- readline("Is the American army commanded by Washington?")
+
   if(w=="y") {Am.Gn.name <- "Washington"}
   if(w=="n"){
     Am.Gn <- writeLines("Is the American army commanded by a General?")
@@ -37,12 +43,18 @@ Br.Gn <- writeLines("Is the Bristish army commanded by a General?")
        }
 
       sr <- readline("Was the American retreat successful?")
-      if(sr=="y"){writeLines("Battle avoided due to successful American retreat")}
+      if(sr=="y"){writeLines("Battle avoided due to successful American retreat")
+
+     BattleSummary <- list(
+        Battle_location=Batt.Loc,
+        General_Names = c(Am.Gn.name,Br.Gn.name),
+        Att_Def = c(Att,Def),
+        American_retreat = sr)
+      }
     }
   }
 
   if(sr=="n"|ar=="n"){
-
   # Part 2 Enter Battle details -------------------------------------------------------------
   writeLines("Part 2: Enter Battle details")
 
@@ -261,20 +273,55 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
     # Step 5: Determine CU losses of BOTH sides ---------
     writeLines("Step 5: Determine the CU losses of BOTH sides")
 
+    BL.CU.L <- 0
+    BW.CU.L <- 0
+
     writeLines(paste("Step 5.1: The loser:",BL,"rolls a die."))
     LDR <- writeLines("Enter die roll:")
-    if(LDR<=3){writeLines(paste("The loser:",BL,"loses 1CU."))}
-    if(LDR==4|LDR==5){writeLines(paste("The loser:",BL,"loses 2CU."))}
-    if(LDR==6){writeLines(paste("The loser:",BL,"loses 2CU."))}
+    if(LDR<=3){
+      BL.CU.L <- 1
+      writeLines(paste("The loser:",BL,"loses 1CU."))
+    }
+    if(LDR==4|LDR==5){
+      BL.CU.L <- 2
+      writeLines(paste("The loser:",BL,"loses 2CU."))
+    }
+    if(LDR==6){
+      BL.CU.L <- 3
+      writeLines(paste("The loser:",BL,"loses 3CU."))
+    }
+
+    BW.CU.L <- 0
 
     writeLines(paste("Step 5.2: The winner:",BW,"rolls a die."))
     WDR <- writeLines("Enter die roll:")
-    if(WDR<=3){writeLines(paste("The winner:",BW,"loses 1CU."))}
-    if(WDR==4|LDR==5){writeLines(paste("The winner:",BW,"loses 2CU."))}
-    if(WDR==6){writeLines(paste("The winner:",BW,"loses 2CU."))}
 
-  writeLines(c("If the winning General has no CU's and the space is enemy controlled",
-                          "then the General is captured."))
+    if( (BL=="Br" & Br.Gn=="n") | (BL=="Am" & Am.Gn=="n") ) {
+      if(WDR==1){ BW.CU.L <- 1
+        writeLines(paste("The winner:",BW,"loses 1CU."))
+      }
+    }
+
+    if( (BL=="Br" & Br.AG==1) | (BL=="Am" & Am.AG==1) ) {
+      if(WDR<=2){ BW.CU.L <- 1
+        writeLines(paste("The winner:",BW,"loses 1CU."))
+      }
+    }
+
+    if( (BL=="Br" & Br.AG==2) | (BL=="Am" & Am.AG==2) ) {
+      if(WDR<=3){ BW.CU.L <- 1
+        writeLines(paste("The winner:",BW,"loses 1CU."))
+      }
+    }
+
+    if( (BL=="Br" & Br.AG==3) | (BL=="Am" & Am.AG==3) ) {
+      if(WDR<=4){ BW.CU.L <- 1
+        writeLines(paste("The winner:",BW,"loses 1CU."))
+      }
+    }
+
+  writeLines(c("Note: If the winning General has no CU's and the space is enemy controlled",
+             "then the General is captured."))
 
   # Step 6: Resolve retreat ---------
     writeLines("Step 6: Resolve retreat (9.6, page 16)")
@@ -293,8 +340,7 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
 
     if(BL==Att){
       writeLines(c("The attacking army lost so must retreat to the space from which",
-                   "they entered the battle."))
-    }
+                   "they entered the battle."))}
 
     LS <- readLines("Did the losing army have to surrender?:")
 
@@ -328,9 +374,11 @@ writeLines("Step 2: Determine realised Battle Rating of each General")
     BattleCard_DRM = c(Br.BC.DRM,Am.BC.DRM),
     Total_DRM =c(Am.TDRM,Br.TDRM),
     Battle_DR = c(Am.BDR,Br.BDR),
-    Battle_Str = c(Am.BS,Br.BS)
-
-  )
+    Battle_Str = c(Am.BS,Br.BS),
+    Battle_loser = BL ,
+    Loser_CU_loss = BL.CU.L ,
+    Battle_winner = BW ,
+    Winner_CU_loss = BW.CU.L)
 
   return(c(Am.WO.DRM, Br.Port.DRM))
   } #end of retreat == "no"
